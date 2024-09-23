@@ -1,12 +1,12 @@
 package com.example.Topic_archiver.Users;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.aspectj.weaver.patterns.PerObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 
 // service bean so classes can be autowired??
@@ -79,7 +79,7 @@ public class PersonService {
 			existPerson.setIdea(idea);
 			
 		}else {
-			existPerson= per.get();
+			existPerson= per.get();// try remove this line ndnfbsjkdfjksdhfjksdnfkjsdh
 			//here where need to make sure the relationship between ideas and person are consistent. If not hibernate 
 			idea.setPerson(existPerson);
 			existPerson.setIdea(idea);

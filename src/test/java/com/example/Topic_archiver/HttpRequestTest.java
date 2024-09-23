@@ -27,7 +27,7 @@ class HttpRequestTest {
 	@Test
 	void HttpRequestTest() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/api/v1/Archive/getIdeas",
-				String.class)).contains("Hello, World");
+				String.class)).contains("[]");
 	}
 	
 

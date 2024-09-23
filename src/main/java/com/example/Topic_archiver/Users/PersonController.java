@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,12 +47,25 @@ public class PersonController {
 		return service.getPerson(id);
 	}
 	
-	@PostMapping (path ="addUser" )
+	@CrossOrigin(origins = "http://127.0.0.1:5500")
+	@GetMapping(path="getIdeas")
+	public List<Idea> getsIdeas() {
+		return service.getIdeas();
+	}
+	
+	@CrossOrigin(origins = "http://127.0.0.1:5500")
+	@PostMapping (path ="addUser", 
+			consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_VALUE},
+			produces = {
+				    MediaType.APPLICATION_FORM_URLENCODED_VALUE, 
+				    MediaType.APPLICATION_JSON_VALUE
+				  })
 	public void setPerson(@RequestBody Person person) {
+		
 		service.addPerson (person);
 		
 	}
-	
+	@CrossOrigin(origins = "http://127.0.0.1:5500")
 	@PostMapping(path = "addIdea")
 	public void addIdea(@RequestBody Idea idea) {
 		System.out.println(idea.toString()+"/n");

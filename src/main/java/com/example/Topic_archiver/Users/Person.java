@@ -1,7 +1,7 @@
 package com.example.Topic_archiver.Users;
 
 import java.time.LocalDate;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
@@ -27,8 +27,13 @@ public class Person {
 
 	private Long ID;
 
-	@Size(min = 5, max = 20, message = "The username must be from 5 to 20 characters.")
-	private String name;
+	@Size(min = 3, max = 20, message = "The username must be from 5 to 20 characters.")
+	private String firstname;
+	
+	@Size(min = 3, max = 20, message = "The surname must be from 5 to 20 characters.")
+	private String surname;
+	
+	
 
 	@Column(unique = true, nullable = false)
 	private String mail;
@@ -38,11 +43,11 @@ public class Person {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Idea> ideas;
+	private List<Idea> ideas= new ArrayList<Idea>();
 
 	public Person(String name, String mail, LocalDate date) {
 
-		this.name = name;
+		this.firstname = name;
 		this.mail = mail;
 		this.date = date;
 
@@ -52,19 +57,21 @@ public class Person {
 
 	}
 
-	public Person(Long iD, String name, String mail, LocalDate date) {
+	public Person(Long iD, String firstname,String surname, String mail, LocalDate date) {
 
 		this.ID = iD;
-		this.name = name;
+		this.firstname = firstname;
+		this.surname = surname;
 		this.mail = mail;
 		this.date = date;
 
 	}
 
-	public Person(Long iD, String name, String mail, LocalDate date, List<Idea> idea) {
+	public Person(Long iD, String name, String surname, String mail, LocalDate date, List<Idea> idea) {
 
 		this.ID = iD;
-		this.name = name;
+		this.firstname = name;
+		this.surname = surname;
 		this.mail = mail;
 		this.date = date;
 		this.ideas = idea;
@@ -72,17 +79,31 @@ public class Person {
 	}
 
 	/**
+	 * @return the surname
+	 */
+	public String getSurname() {
+		return surname;
+	}
+
+	/**
+	 * @param surname the surname to set
+	 */
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getFirstname() {
+		return firstname;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstname(String name) {
+		this.firstname = name;
 	}
 
 	/**
@@ -124,9 +145,12 @@ public class Person {
 		this.date = date;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "Person [ID=" + ID + ", name=" + name + ", mail=" + mail + ", dateOFRegistrationDate=" + date + "]";
+		return "Person [ID=" + ID + ", firstname=" + firstname + ", surname=" + surname + ", mail=" + mail + ", date="
+				+ date + ", ideas=" + ideas + "]";
 	}
 
 	/**
@@ -145,7 +169,7 @@ public class Person {
 	}
 
 	public void setIdea(Idea idea) {
-
+		
 		this.ideas.add(idea);
 	}
 

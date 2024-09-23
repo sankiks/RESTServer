@@ -1,5 +1,6 @@
 package com.example.Topic_archiver.Users;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,23 +28,21 @@ public class PersonService {
 	}
 
 	public void addPerson(Person person) {
-		Optional<Person> personMail = personRepo.findPersonbyMail(person.getMail());
-		// check if mail is taken
 		
-
-		personRepo.save(person);
+		Optional<Person> personObj = personRepo.findPersonbyMail(person.getMail());
+		
+		
+		if(!personObj.isPresent()) {
+			personRepo.save(person);
+			
+		}else {
+			throw new IllegalStateException("there is already an existing user with this mail");
+		}
+				
 	}
 	
 
-	public void addIdea(Idea idea) {
-		
-			
-			ideaRepo.save(idea);
-		
-			
-		
-
-	}
+	
 
 	public Person getPerson(String id) {
 		Long userId = Long.decode(id);
@@ -62,13 +61,38 @@ public class PersonService {
 		if (!per.isPresent()) {
 			throw new IllegalStateException("No user with ID: "+id);
 		}
-		ideaRepo.save(idea);
+		Person existPerson= per.get();
+		existPerson.getIdeas().add(idea);
+		personRepo.save(existPerson);
+	
 	}
+	
+	
+	public void addIdea( Idea idea) {
+		
+		Optional<Person> per= personRepo.findPersonbyMail(idea.getPerson().getMail());
+		Person existPerson;
+		if (!per.isPresent()) {
+			//List <Idea> ideas= new ArrayList<Idea>();
+			existPerson= idea.getPerson();
+			
+			existPerson.setIdea(idea);
+			
+		}else {
+			existPerson= per.get();
+			//here where need to make sure the relationship between ideas and person are consistent. If not hibernate 
+			idea.setPerson(existPerson);
+			existPerson.setIdea(idea);
+		}
+		
+		personRepo.save(existPerson);
+	}
+
 
 	public void changeCredentials(Person per,Long id) {
 		Person personOptional = personRepo.findById(id).get();
 		personOptional.setDateOFRegistrationDate(per.getDateOFRegistrationDate());
-		personOptional.setName(per.getName());
+		personOptional.setFirstname(per.getFirstname());
 		personOptional.setMail(per.getMail());
 		
 		personRepo.save(personOptional);
@@ -97,6 +121,11 @@ public class PersonService {
 		}
 		
 		return false;
+	}
+
+	public List<Idea> getIdeas() {
+		// TODO Auto-generated method stub
+		return ideaRepo.findAll();
 	}
 
 }
